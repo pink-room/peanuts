@@ -40,8 +40,8 @@ _state.update { oldState -> oldState.copy(isLoading = true) }
 
 Even tho the code above is simple, it has 2 main flaws:
 
-1. You always need to remember copying the old state to create a new state;
-2. Due to that, you need to right the same code over and over again.
+1. You always need to remember to copy the old state to create a new state;
+2. Due to that, you need to write the same code over and over again.
 
 Peanuts is a very simple library that uses KSP and KotlinPoet in order to simplify your life while
 updating screen states. It will automatically generate an extension function for you, like this one:
