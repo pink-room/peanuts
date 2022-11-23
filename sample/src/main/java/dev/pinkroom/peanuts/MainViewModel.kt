@@ -1,8 +1,11 @@
 package dev.pinkroom.peanuts
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
@@ -17,7 +20,9 @@ class MainViewModel : ViewModel() {
         _state.update(showHelloWorld = false)
     }
 
-    fun onShowMessageClicked() {
-        _state.update(message = Message("Hello!"))
+    fun onLoadingClicked() = viewModelScope.launch {
+        _state.update(isLoading = true)
+        delay(1000)
+        _state.update(isLoading = false)
     }
 }
