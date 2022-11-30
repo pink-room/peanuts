@@ -1,0 +1,71 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
+    }
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+group = PUBLISH_GROUP_ID
+version = PUBLISH_VERSION
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId PUBLISH_GROUP_ID
+                artifactId PUBLISH_ARTIFACT_ID
+                version PUBLISH_VERSION
+
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    from components.java
+                }
+
+                artifact androidSourcesJar
+
+                pom {
+                    name = PUBLISH_ARTIFACT_ID
+                    description = 'Updating your UI state is now peanuts!'
+                    url = 'https://github.com/pink-room/peanuts'
+                    licenses {
+                        license {
+                            name = 'Apache-2.0 License'
+                            url = 'https://github.com/pink-room/peanuts/blob/main/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'bffcorreia'
+                            name = 'Bruno Correia'
+                            email = 'bruno@pinkroom.dev'
+                        }
+                    }
+
+                    scm {
+                        connection = 'scm:git:github.com/pink-room/peanuts.git'
+                        developerConnection = 'scm:git:ssh://github.com/pink-room/peanuts.git'
+                        url = 'https://github.com/pink-room/peanuts/tree/main'
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(
+            rootProject.ext["signing.keyId"],
+            rootProject.ext["signing.key"],
+            rootProject.ext["signing.password"],
+    )
+    sign publishing.publications
+}
