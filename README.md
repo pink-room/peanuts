@@ -1,7 +1,7 @@
 # Peanuts
 
-If you use Kotlin flows to manage your Android UI states, chances are that this code is familiar to
-you on a daily basis.
+If you use Kotlin flows to manage your Jetpack Compose UI states, chances are that this code is
+familiar to you on a daily basis.
 
 You have a state:
 
@@ -24,12 +24,12 @@ class MyScreenViewModel : ViewModel() {
 Then, whenever you want to update the screen state, you need to do something like:
 
 ```kotlin
-_state.update { oldState -> oldState.copy(isLoading = true) }
+_state.update { currentState -> currentState.copy(isLoading = true) }
 ```
 
 -------
 <p align="center">
-    <a href="#why-peanuts">Why Peanuts?</a> &bull;
+    <a href="#why">Why?</a> &bull;
     <a href="#installation">Installation</a> &bull;
     <a href="#usage">Usage</a>
 </p>
@@ -40,11 +40,11 @@ _state.update { oldState -> oldState.copy(isLoading = true) }
 
 Even tho the code above is simple, it has 2 main flaws:
 
-1. You always need to remember to copy the old state to create a new state;
+1. You always need to remember to copy the current state to create a new state;
 2. Due to that, you need to write the same code over and over again.
 
-Peanuts is a very simple library that uses KSP and KotlinPoet in order to simplify your life while
-updating screen states. It will automatically generate an extension function for you, like this one:
+Peanuts is a very simple library that uses KSP and KotlinPoet to simplify the screen state updates.
+It will automatically generate an extension function for you, like this one:
 
 ````kotlin
 fun MutableStateFlow<MyScreenState>.update(isLoading: Boolean = value.isLoading, ...) =
