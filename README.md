@@ -1,5 +1,7 @@
 # Peanuts
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.pinkroom/peanuts/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.pinkroom/peanuts)
+
 If you use Kotlin flows to manage your Jetpack Compose UI states, chances are that this code is
 familiar to you on a daily basis.
 
@@ -29,7 +31,7 @@ _state.update { currentState -> currentState.copy(isLoading = true) }
 
 -------
 <p align="center">
-    <a href="#why">Why?</a> &bull;
+    <a href="#why">Why</a> &bull;
     <a href="#installation">Installation</a> &bull;
     <a href="#usage">Usage</a>
 </p>
@@ -59,9 +61,37 @@ _state.update(isLoading = true)
 
 ## Installation
 
+1. Add KSP plugin:
+
 ``` groovy
-implementation 'dev.pinkroom:peanuts:<latest_version>'
+plugins {
+    //...
+    id 'com.google.devtools.ksp' version '1.7.20-1.0.7' // Depends on your kotlin version
+}
 ```
+
+2. Add dependency:
+
+``` groovy
+dependencies {
+    implementation 'dev.pinkroom:peanuts:<latest_version>'
+    ksp 'dev.pinkroom:peanuts:<latest_version>'
+}
+```
+
+3. Add KSP generated folders as source directories:
+
+``` groovy
+applicationVariants.all { variant ->
+    kotlin.sourceSets {
+        getByName(variant.name) {
+            kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+        }
+    }
+}
+```
+
+**Note:** This is only needed due to [this](https://github.com/google/ksp/issues/37) issue.
 
 ## Usage
 
