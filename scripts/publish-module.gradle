@@ -17,6 +17,11 @@ group = PUBLISH_GROUP_ID
 version = PUBLISH_VERSION
 
 afterEvaluate {
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     publishing {
         publications {
             release(MavenPublication) {
@@ -29,8 +34,6 @@ afterEvaluate {
                 } else {
                     from components.java
                 }
-
-                artifact androidSourcesJar
 
                 pom {
                     name = PUBLISH_ARTIFACT_ID
