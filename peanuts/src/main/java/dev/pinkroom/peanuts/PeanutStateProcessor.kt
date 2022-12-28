@@ -10,11 +10,8 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSValueParameter
 import com.google.devtools.ksp.validate
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
@@ -37,6 +34,11 @@ internal class PeanutStateProcessor(
             dataClass?.toClassName()?.let { className ->
                 val updateFunSpec = FunSpec.builder("update")
                     .receiver(MutableStateFlow::class.asClassName().parameterizedBy(className))
+                    .addAnnotation(
+                        AnnotationSpec.builder(JvmName::class)
+                            .addMember("%S", "update${className.simpleName}")
+                            .build()
+                    )
                 buildParameters(dataClass)?.addTo(updateFunSpec)
                 addFunctionBody(updateFunSpec)
                 peanutStateHelperBuilder.addFunction(updateFunSpec.build())
