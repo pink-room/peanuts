@@ -31,7 +31,7 @@ _state.update { currentState -> currentState.copy(isLoading = true) }
 
 -------
 <p align="center">
-    <a href="#why">Why</a> &bull;
+    <a href="#why-peanuts">Why</a> &bull;
     <a href="#installation">Installation</a> &bull;
     <a href="#usage">Usage</a>
 </p>
@@ -63,10 +63,21 @@ _state.update(isLoading = true)
 
 1. Add KSP plugin:
 
+In your project build gradle:
+
 ``` groovy
 plugins {
     //...
     id 'com.google.devtools.ksp' version '1.7.20-1.0.7' // Depends on your kotlin version
+}
+```
+
+In your app build gradle:
+
+```groovy
+plugins {
+    // ...
+    id 'com.google.devtools.ksp'
 }
 ```
 
@@ -82,10 +93,13 @@ dependencies {
 3. Add KSP generated folders as source directories:
 
 ``` groovy
-applicationVariants.all { variant ->
-    kotlin.sourceSets {
-        getByName(variant.name) {
-            kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+android {
+    // ...
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
         }
     }
 }
